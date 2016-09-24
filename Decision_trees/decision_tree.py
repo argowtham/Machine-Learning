@@ -207,7 +207,7 @@ if __name__ == '__main__':
     depth = eval(input("Enter the desired depth of the decision tree\n"))
     path = input("Enter the filename with the full path\n")
     attributes = ['class', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'Id']
-    dt = DecisionTree(d, process_data(path, attributes), attributes)
+    dt = DecisionTree(depth, process_data(path, attributes), attributes)
     dt.build_tree()
     test_path = path.replace("train", "test")
     predicted_data = dt.predict(process_data(test_path, attributes))
