@@ -196,10 +196,22 @@ def find_error(data, a, b):
     actual = list(data[a])
     predicted = list(data[b])
     error = 0
+    fp, fn, tp, tn = 0, 0, 0, 0
     for i in range(len(actual)):
         if not actual[i] == predicted[i]:
             error += 1
-    return (error/len(actual))
+            if actual[i] == 1:
+                fn += 1
+            else:
+                fp += 1
+        else:
+            if actual[i] == 1:
+                tp += 1
+            else:
+                tn += 1
+    confusion_matrix = pd.DataFrame([[tn, fp], [fn, tp]], columns=['Yes', 'No'], index=['Yes', 'No'])
+    print(confusion_matrix)
+    return error/len(actual)
     # return round((1-(error/len(actual)))*100, 2)
 
 if __name__ == '__main__':
@@ -212,4 +224,5 @@ if __name__ == '__main__':
     test_path = path.replace("train", "test")
     predicted_data = dt.predict(process_data(test_path, attributes))
     print(find_error(predicted_data, 'class', 'predicted'))
+
 
