@@ -4,11 +4,12 @@ from Decision_trees import binary_node as bn
 
 
 class BinaryDTree:
-    def __init__(self, target):
+    def __init__(self, target, depth):
         self.root = None
         self.target = target
+        self.depth = depth
 
-    def buildtree(self, depth, data, features):
+    def buildtree(self, data, features):
         self.root = find_node(data, features)
         self.root.depth = 1
         find_child(self.root, data, features)
@@ -39,7 +40,7 @@ class BinaryDTree:
     def find_leaf(self, row):
         node_list = [self.root]
         for node in node_list:
-            if not node.feature == 'leaf':
+            if not node.feature == 'leaf' and node.depth <= dt.depth:
                 if row[node.feature] == node.value:
                     node_list.append(node.true_child)
                 else:
@@ -126,7 +127,7 @@ def find_error(data, a, b):
                 tn += 1
     confusion_matrix = pd.DataFrame([[tn, fp], [fn, tp]], columns=['Yes', 'No'], index=['Yes', 'No'])
     print(confusion_matrix)
-    print(error/len(actual))
+    print("Error rate: ", error/len(actual))
     return round((1-(error/len(actual)))*100, 2)
 
 
@@ -134,11 +135,12 @@ if __name__ == "__main__":
     print("------------------------------------------------")
     print("Program to implement binary split decision tree")
     print("------------------------------------------------")
-    # depth = eval(input("Enter the depth of the decision tree\n"))
+    depth = eval(input("Enter the depth of the decision tree\n"))
     input_file = input("Enter the filename with the full path\n")
     attributes = ['class', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'Id']
-    dt = BinaryDTree(attributes[0])
-    dt.buildtree(depth=1, data=process_data(input_file, attributes), features=attributes[1:7])
+    dt = BinaryDTree(attributes[0], depth)
+    dt.buildtree(data=process_data(input_file, attributes), features=attributes[1:7])
     test_file = input_file.replace("train", "test")
     predicted_data = dt.predict(process_data(test_file, attributes))
-    print(find_error(predicted_data, 'class', 'predicted'))
+    print("Accuracy: ", find_error(predicted_data, 'class', 'predicted'))
+    dt.root.tree_display()

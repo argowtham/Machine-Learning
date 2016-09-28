@@ -13,3 +13,14 @@ class BinaryNode:
         print("Label:", self.label)
         print("Depth:", self.depth)
         print("Value:", self.value)
+
+    def tree_display(self):
+        if not self.feature == 'leaf':
+            print(('\t' * self.depth) + "If " + str(self.feature) + " = " + str(self.value))
+            self.true_child.tree_display()
+            self.false_child.tree_display()
+        else:
+            print(('\t' * self.depth) + "If " + str(self.feature) + ', label ' + str(self.label))
+
+
+
