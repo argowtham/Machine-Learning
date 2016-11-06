@@ -10,8 +10,8 @@ def evaluate(array1, array2):
             correct += 1
         else:
             wrong += 1
-    print("Accuracy is {}.".format(correct / len(array1)))
-    print("Error rate is {}.".format(wrong / len(array1)))
+    print("Accuracy is {}%".format(round(correct / len(array1), 2)*100))
+    print("Error rate is {}%".format(round(wrong / len(array1), 2)*100))
 
 
 if __name__ == "__main__":
