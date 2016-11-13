@@ -108,7 +108,7 @@ if __name__ == "__main__":
     print("=============================================")
     file_path = input("Enter the path of the file\n")
     data = process_data(file_path, sep=',')
-    train_data, test_data = split_data(data, fraction=0.4)
+    train_data, test_data = split_data(data, fraction=0.67)
     split_data = separate_by_class(train_data)
     parameters = {}
     target = list(data.columns)[-1]
