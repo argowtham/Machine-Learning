@@ -1,5 +1,5 @@
 from Naive_Bayes import NaiveBayes as nb
-import sklearn.naive_bayes as naivebayes
+from sklearn.naive_bayes import GaussianNB
 import numpy as np
 
 
@@ -15,17 +15,17 @@ def evaluate(array1, array2):
 
 if __name__ == "__main__":
     print("=============================================")
-    print("\t\t\tNaive Bayes Algorithm using package")
+    print("\tNaive Bayes Algorithm using package")
     print("=============================================")
     file_path = input("Enter the path of the file\n")
     data = nb.process_data(file_path, sep=',')
     train_data, test_data = nb.split_data(data, fraction=0.67)
     n = len(data.columns) - 1
-    X = train_data.drop(train_data.columns[n], axis=1)
+    X = train_data.drop(data.columns[n], axis=1)
     Y = train_data[n]
-    model = naivebayes.GaussianNB()
+    model = GaussianNB()
     model.fit(X, Y)
-    test_data.drop(test_data.columns[n], axis=1)
-    predicted = model.predict(test_data)
+    X_test = test_data.drop(data.columns[n], axis=1)
+    predicted = model.predict(X_test)
     actual = np.array(test_data[n])
     evaluate(predicted, actual)

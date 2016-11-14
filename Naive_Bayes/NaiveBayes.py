@@ -97,7 +97,7 @@ def find_error(frame, a, b, return_param=None):
     print(confusion_matrix)
     print("Error rate: ", error/len(actual))
     if return_param == "Error":
-        return error/len(actual)
+        return round((error/len(actual))*100, 2)
     else:
         return round((1-(error/len(actual)))*100, 2)
 
