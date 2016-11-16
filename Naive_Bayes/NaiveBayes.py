@@ -15,7 +15,8 @@ def split_data(frame, fraction=None):
 
 
 def separate_by_class(frame):
-    """Returns the dataset seperated as per the attribute values of class variable"""
+    """Returns the dataset seperated as per the attribute values of class variable
+    :param frame: Data frame that is passed to split"""
     """Assuming the last column in dataframe as class variable"""
     target = list(frame.columns)[-1]
     unique_values = list(set(list(frame[target])))
@@ -39,6 +40,16 @@ def find_sd(array):
     return mean, sd
 
 
+def find_probability(values):
+    unique_values = list(set(values))
+    total = len(values)
+    probability = {}
+    for value in unique_values:
+        count = values.count(value)
+        probability[value] = count / total
+    return probability
+
+
 def find_parameters(frame):
     features = list(frame.columns)
     del features[-1]
@@ -46,7 +57,12 @@ def find_parameters(frame):
     for feature in features:
         params[feature] = {}
         values = list(frame[feature])
-        params[feature]['mean'], params[feature]['sd'] = find_sd(values)
+        if len(list(set(values))) <= 5:
+            params[feature]['probability'] = find_probability(values)
+            params[feature]['type'] = "discrete"
+        else:
+            params[feature]['mean'], params[feature]['sd'] = find_sd(values)
+            params[feature]['type'] = "continuous"
     return params
 
 
@@ -66,7 +82,10 @@ def predict(frame, params):
         for key in params:
             probability[key] = 1.0
             for j in range(len(record)-1):
-                probability[key] *= calculate_probability(record[j], params[key][j]['mean'], params[key][j]['sd'])
+                if params[key][j]['type'] == "continuous":
+                    probability[key] *= calculate_probability(record[j], params[key][j]['mean'], params[key][j]['sd'])
+                else:
+                    probability[key] *= params[key][j]['probability'][record[j]]
         max_prob = 0
         for k in probability:
             if probability[k] > max_prob:
@@ -107,7 +126,7 @@ if __name__ == "__main__":
     print("\t\t\tNaive Bayes Algorithm")
     print("=============================================")
     file_path = input("Enter the path of the file\n")
-    data = process_data(file_path, sep=',')
+    data = process_data(file_path, sep=' ')
     train_data, test_data = split_data(data, fraction=0.67)
     split_data = separate_by_class(train_data)
     parameters = {}
