@@ -132,12 +132,15 @@ class LogisticRegression(object):
         temp_y_t = replace(list(self.y_t), 'no', 0)
         self.y_t = replace(temp_y_t, 'yes', 1)
 
-        self.x = (self.x - self.x.mean())/(self.x.max() - self.x.min())
-        self.x_t = (self.x_t - self.x_t.mean())/(self.x_t.max() - self.x_t.min())
+        self.x = (self.x - self.x.min())/(self.x.max() - self.x.min())
+        self.x_t = (self.x_t - self.x_t.min())/(self.x_t.max() - self.x_t.min())
 
     def update_weights(self):
         for _ in range(self.d):
             self.weight[_] += self.theta * self.slope[_]
+
+    def plot_auc_roc_curve(self):
+        pass
 
 
 def replace(array, x, y):

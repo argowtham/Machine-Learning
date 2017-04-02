@@ -54,3 +54,8 @@ class GridWorld(object):
                     sys.stdout.write(str(self.world_grid[i][j].reward) + " ")
                 print()
             print()
+        elif param == "q_value":
+            for i in range(self.nrows):
+                for j in range(self.ncols):
+                    sys.stdout.write("Q_values of state {} is {}".format([i, j], self.world_grid[i][j].q_value))
+                    print()
